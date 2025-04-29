@@ -14,6 +14,10 @@
                     SecondaryColor="Lime" />
 
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MachineVision.shard;component/Thems/Generic.xaml" />
+                <!--  多语言资源  -->
+                <ResourceDictionary Source="pack://application:,,,/MachineVision;component/Assets/zh-CN.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MachineVision;component/Assets/en-US.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

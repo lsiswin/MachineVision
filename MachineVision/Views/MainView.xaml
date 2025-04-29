@@ -25,7 +25,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock
-                    Margin="5,15"
+                    Margin="15,15"
                     FontSize="15"
                     FontWeight="Bold"
                     Foreground="White"
@@ -144,6 +144,7 @@
         <ContentControl
             x:Name="MainViewContentControl"
             Grid.Row="2"
+            Margin="10"
             prism:RegionManager.RegionName="MainViewRegion"
             Visibility="Collapsed" />
     </Grid>

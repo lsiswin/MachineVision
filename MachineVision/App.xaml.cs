@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows;
 using MachineVision.Services;
+using MachineVision.TemplateMatch;
 using MachineVision.ViewModels;
 using MachineVision.Views;
 
@@ -43,6 +44,13 @@ namespace MachineVision
             services.RegisterForNavigation<DashboardView, DashboardViewModel>();
             services.RegisterForNavigation<MainView, MainViewModel>();
 
+        }
+
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            //注册模块
+            moduleCatalog.AddModule<TemplateMatchModel>();
+            base.ConfigureModuleCatalog(moduleCatalog);
         }
     }
 

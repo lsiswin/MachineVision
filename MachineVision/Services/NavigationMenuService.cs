@@ -34,7 +34,7 @@ namespace MachineVision.Services
             {
                  new NavigationItem("ApplicationExport","TemplateMatch","模板匹配","",new ObservableCollection<NavigationItem>()
                  {
-                      new NavigationItem("ShapeOutline","ShapeMatch","形状匹配","ShapeView"),
+                      new NavigationItem("ShapeOutline","ShapeMatch","形状匹配","DrawShapeView"),
                       new NavigationItem("Clouds","NccMacth", "相似性匹配","NccView"),
                       new NavigationItem("ShapeOvalPlus","DeformationMatch","形变匹配","LocalDeformableView"),
                  }),
@@ -48,9 +48,10 @@ namespace MachineVision.Services
                       new NavigationItem("Qrcode", "QrCode","二维码识别","QrCodeView"),
                  })
             }));
-            Items.Add(new NavigationItem("ShapeOutline", "ShapeMatch", "形状匹配", "ShapeView"));
-            Items.Add(new NavigationItem("Clouds", "NccMacth", "相似性匹配", "NccView"));
-            Items.Add(new NavigationItem("ShapeOvalPlus", "DeformationMatch", "形变匹配", "LocalDeformableView"));
+            Items.Add(new NavigationItem("ApplicationExport", "TemplateMatch", "模板匹配",""));
+            Items.Add(new NavigationItem("ArchiveClock", "Measure", "比较测量", ""));
+            Items.Add(new NavigationItem("ArrowDownBoldHexagonOutline", "Character", "字符识别", ""));
+            Items.Add(new NavigationItem("Doc", "Doc", "学习文档", "DocView"));
             Items.Add(new NavigationItem("Cog", "Setting", "系统设置", "SettingView"));
 
         }
