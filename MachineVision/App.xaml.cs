@@ -40,9 +40,11 @@ namespace MachineVision
 
         protected override void RegisterTypes(IContainerRegistry services)
         {
+            services.Register<ISettingService, SettingService>();
             services.RegisterScoped<INavigationMenuService, NavigationMenuService>();
             services.RegisterForNavigation<DashboardView, DashboardViewModel>();
             services.RegisterForNavigation<MainView, MainViewModel>();
+            services.RegisterForNavigation<SettingView,SettingViewModel>();
 
         }
 

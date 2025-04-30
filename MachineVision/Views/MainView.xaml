@@ -29,7 +29,7 @@
                     FontSize="15"
                     FontWeight="Bold"
                     Foreground="White"
-                    Text="WPF/HALCON机器视觉算法平台" />
+                    Text="{DynamicResource ApplicationName}" />
                 <ListBox
                     x:Name="listMenuBox"
                     Grid.Column="1"

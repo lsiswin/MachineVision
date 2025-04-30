@@ -1,2 +1,0 @@
-ApplicationName
-All
