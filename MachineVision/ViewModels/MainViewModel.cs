@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using MachineVision.Core;
 using MachineVision.Extensions;
 using MachineVision.Models;
 using MachineVision.Services;
 using MachineVision.shard.Events;
+using MaterialDesignThemes.Wpf;
+using SqlSugar.Extensions;
 
 namespace MachineVision.ViewModels
 {
@@ -89,6 +92,8 @@ namespace MachineVision.ViewModels
             {
                 LanguageHelper.SetLanguage(setting.Language);
             }
+            SettingViewModel.ModifyTheme(theme => theme.SetBaseTheme(setting.SkinName.ObjToBool()?BaseTheme.Dark:BaseTheme.Light));
+
         }
     }
 }

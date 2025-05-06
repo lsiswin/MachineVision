@@ -10,14 +10,16 @@
     xmlns:prism="http://prismlibrary.com/"
     Width="1280"
     Height="768"
-    prism:ViewModelLocator.AutoWireViewModel="True">
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    Background="{DynamicResource MaterialDesignPaper}"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <materialDesign:ColorZone materialDesign:ElevationAssist.Elevation="Dp2" Mode="PrimaryDark">
+        <materialDesign:ColorZone materialDesign:ElevationAssist.Elevation="Dp4" Mode="PrimaryMid">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />

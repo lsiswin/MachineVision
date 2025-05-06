@@ -1,0 +1,136 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using HalconDotNet;
+
+namespace MachineVision.Core.TemplateMatch
+{
+    public class ShapeModelService : BindableBase,ITemplateMatchService
+    {
+        public ShapeModelService()
+        {
+            Info = new MethodInfo
+            {
+                Name = "find_shape_model",
+                Description = "Find the best matches of a shape model in an image",
+                MethodParameters = new List<MethodParameter>()
+                {
+                    new MethodParameter
+                    {
+                        Name = "Image",
+                        Description = "Input image in which the model should be found.",
+                    },
+                    new MethodParameter { Name = "ModelID", Description = "Handle of the model." },
+                    new MethodParameter
+                    {
+                        Name = "AngleStart",
+                        Description = "Input image in which the model should be found.",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "AngleExtent ",
+                        Description = "Extent of the rotation angles.",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "MinScore",
+                        Description = "Minimum score of the instances of the model to be found.",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "NumMatches",
+                        Description =
+                            "Number of instances of the model to be found (or 0 for all matches).",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "MaxOverlap",
+                        Description = "Maximum overlap of the instances of the model to be found.",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "SubPixel",
+                        Description = "Subpixel accuracy if not equal to 'none'.",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "NumLevels",
+                        Description =
+                            "Number of pyramid levels used in the matching (and lowest pyramid level to use if |NumLevels| = 2).",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "Greediness",
+                        Description =
+                            "“Greediness” of the search heuristic (0: safe but slow; 1: fast but matches may be missed).",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "Row",
+                        Description = "Row coordinate of the found instances of the model.",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "Column",
+                        Description = "Column coordinate of the found instances of the model.",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "Angle",
+                        Description = "Rotation angle of the found instances of the model.",
+                    },
+                    new MethodParameter
+                    {
+                        Name = "Score",
+                        Description = "Score of the found instances of the model.",
+                    },
+                },
+                Predecessors = new List<string>()
+                {
+                    "create_shape_model",
+                    "read_shape_model",
+                    "set_shape_model_origin",
+                },
+            };
+            //初始化模板和运行参数
+            TemplateParameter = new ShapeModelInputParameter();
+            RunParameter = new ShapeModelRunParameter();
+            TemplateParameter.ApplyDefaultParameter();
+            RunParameter.ApplyDefaultParameter();
+        }
+        private ShapeModelInputParameter templateParameter;
+        /// <summary>
+        /// 模板参数
+        /// </summary>
+        public ShapeModelInputParameter TemplateParameter
+        {
+            get { return templateParameter; }
+            set { templateParameter = value; RaisePropertyChanged(); }
+        }
+        private ShapeModelRunParameter runParameter;
+        /// <summary>
+        /// 运行参数
+        /// </summary>
+        public ShapeModelRunParameter RunParameter
+        {
+            get { return runParameter; }
+            set { runParameter = value; RaisePropertyChanged(); }
+        }
+
+
+        public MethodInfo Info { get; set; }
+
+        public Task CreateTemplate(HObject hObject)
+        {
+            return null;
+        }
+
+        public void SetRunParameter() { }
+
+        public void SetTemplateParameter() { }
+    }
+    
+        
+}

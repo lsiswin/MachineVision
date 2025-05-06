@@ -12,4 +12,10 @@
     <PackageReference Include="Prism.DryIoc" Version="9.0.537" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="halcondotnet">
+      <HintPath>..\..\..\Program Files\MVTec\HALCON-24.11-Progress-Steady\bin\dotnet35\halcondotnet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

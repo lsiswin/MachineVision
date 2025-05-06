@@ -22,6 +22,9 @@
     <sys:String x:Key="Document">学习文档</sys:String>
     <sys:String x:Key="Setting">系统设置</sys:String>
 
+    <sys:String x:Key="Dark">深色</sys:String>
+    <sys:String x:Key="Light">浅色</sys:String>
+
     <sys:String x:Key="CurrentLanguage">当前语言</sys:String>
     <sys:String x:Key="Skin">主题</sys:String>
     <sys:String x:Key="Doc">学习文档</sys:String>

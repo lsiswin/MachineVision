@@ -21,7 +21,8 @@
     <sys:String x:Key="Deformable">Deformable</sys:String>
     <sys:String x:Key="Document">Document</sys:String>
     <sys:String x:Key="Setting">Setting</sys:String>
-
+    <sys:String x:Key="Dark">Dark</sys:String>
+    <sys:String x:Key="Light">Light</sys:String>
     <sys:String x:Key="CurrentLanguage">CurrentLanguage</sys:String>
     <sys:String x:Key="Skin">Skin</sys:String>
 

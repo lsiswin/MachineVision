@@ -51,7 +51,7 @@ namespace MachineVision.Services
                                     "ShapeOutline",
                                     "ShapeMatch",
                                     "形状匹配",
-                                    "DrawShapeView"
+                                    "ShapeView"
                                 ),
                                 new NavigationItem("Clouds", "NccMacth", "相似性匹配", "NccView"),
                                 new NavigationItem(
@@ -108,7 +108,7 @@ namespace MachineVision.Services
                             "ShapeOutline",
                             "ShapeMatch",
                             "形状匹配",
-                            "DrawShapeView"
+                            "ShapeView"
                         ),
                         new NavigationItem("Clouds", "NccMacth", "相似性匹配", "NccView"),
                         new NavigationItem(

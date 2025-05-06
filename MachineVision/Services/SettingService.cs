@@ -18,8 +18,7 @@ namespace MachineVision.Services
                 setting = new Setting()
                 {
                     Language = "zh-CN",
-                    SkinName = "Default",
-                    SkinColor = "#FF0000"
+                    SkinName = "ture"
                 };
                 Db.Insertable(setting).ExecuteCommand();
                 return await GetSettingAsync();

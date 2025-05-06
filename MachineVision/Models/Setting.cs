@@ -10,7 +10,6 @@ namespace MachineVision.Models
     {
         public string Language { get; set; }
         public string SkinName { get; set; }
-        public string SkinColor { get; set; }
 
     }
 }

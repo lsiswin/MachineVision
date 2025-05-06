@@ -1,8 +1,11 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
+using MachineVision.Core.TemplateMatch;
 using MachineVision.Services;
 using MachineVision.TemplateMatch;
+using MachineVision.TemplateMatch.ViewModels;
+using MachineVision.TemplateMatch.Views;
 using MachineVision.ViewModels;
 using MachineVision.Views;
 
@@ -45,6 +48,8 @@ namespace MachineVision
             services.RegisterForNavigation<DashboardView, DashboardViewModel>();
             services.RegisterForNavigation<MainView, MainViewModel>();
             services.RegisterForNavigation<SettingView,SettingViewModel>();
+            services.RegisterForNavigation<ShapeView, ShapeViewModel>();
+            services.Register<ITemplateMatchService,ShapeModelService>(nameof(TemplateMatchType.ShapeModel));
 
         }
 
