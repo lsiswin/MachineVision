@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Media3D;
 using HalconDotNet;
 
 namespace MachineVision.Core.TemplateMatch
 {
-    public class ShapeModelService : BindableBase,ITemplateMatchService
+    public class ShapeModelService : BindableBase, ITemplateMatchService
     {
         public ShapeModelService()
         {
@@ -96,41 +99,129 @@ namespace MachineVision.Core.TemplateMatch
             };
             //初始化模板和运行参数
             TemplateParameter = new ShapeModelInputParameter();
+            Setting = new MatchResultSetting();
             RunParameter = new ShapeModelRunParameter();
             TemplateParameter.ApplyDefaultParameter();
             RunParameter.ApplyDefaultParameter();
         }
+        private MatchResultSetting setting;
+
+        public MatchResultSetting Setting
+        {
+            get { return setting; }
+            set { setting = value; RaisePropertyChanged(); }
+        }
+
+        private HTuple modelID;
+        HTuple hv_Row = new HTuple(),
+            hv_Column = new HTuple();
+        HTuple hv_Angle = new HTuple(),
+            hv_Score = new HTuple();
         private ShapeModelInputParameter templateParameter;
+
         /// <summary>
         /// 模板参数
         /// </summary>
         public ShapeModelInputParameter TemplateParameter
         {
             get { return templateParameter; }
-            set { templateParameter = value; RaisePropertyChanged(); }
+            set
+            {
+                templateParameter = value;
+                RaisePropertyChanged();
+            }
         }
         private ShapeModelRunParameter runParameter;
+
         /// <summary>
         /// 运行参数
         /// </summary>
         public ShapeModelRunParameter RunParameter
         {
             get { return runParameter; }
-            set { runParameter = value; RaisePropertyChanged(); }
+            set
+            {
+                runParameter = value;
+                RaisePropertyChanged();
+            }
         }
-
 
         public MethodInfo Info { get; set; }
 
-        public Task CreateTemplate(HObject hObject)
+        public async Task CreateTemplate(HObject image, HObject hObject)
         {
-            return null;
+            await Task.Run(() =>
+            {
+                HObject template;
+                HOperatorSet.GenEmptyObj(out template);
+                HOperatorSet.ReduceDomain(image, hObject, out template);
+                //创建模板
+                HOperatorSet.CreateShapeModel(
+                    template,
+                    TemplateParameter.NumLevels,
+                    TemplateParameter.AngleStart,
+                    TemplateParameter.AngleExtent,
+                    TemplateParameter.AngleStep,
+                    TemplateParameter.Optimization,
+                    TemplateParameter.Metric,
+                    TemplateParameter.Contrast,
+                    TemplateParameter.MinContrast,
+                    out modelID
+                );
+            });
         }
 
         public void SetRunParameter() { }
 
         public void SetTemplateParameter() { }
+
+        public MatchResult Run(HObject image)
+        {
+            MatchResult matchResult = new MatchResult();
+            if (modelID == null) return matchResult;
+            var timeSpane = SetTime(() =>
+            {
+                HOperatorSet.FindShapeModel(
+                image,
+                modelID,
+                RunParameter.AngleStart,
+                RunParameter.AngleExtent,
+                RunParameter.MinScore,
+                RunParameter.NumMatches,
+                RunParameter.MaxOverlap,
+                RunParameter.SubPixel,
+                RunParameter.NumLevels,
+                RunParameter.Greediness,
+                out hv_Row, out hv_Column,
+                out hv_Angle, out hv_Score
+            );
+            });
+            
+            for (int i = 0; i < hv_Score.Length; i++)
+            {
+                matchResult.Results.Add(
+                    new TemplateMatchResult
+                    {
+                        Index = i + 1,
+                        Row = hv_Row.DArr[i],
+                        Column = hv_Column.DArr[i],
+                        Angle = hv_Angle.DArr[i],
+                        Score = hv_Score.DArr[i],
+                    }
+                );
+            }
+            matchResult.TimeSpane = timeSpane;
+            matchResult.Message = $"生成匹配结果耗时:{timeSpane}"+$",结果数量:{matchResult.Results.Count}个";
+            return matchResult;
+        }
+
+        private double SetTime(Action action)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+            action();
+            stopwatch.Stop();
+            return stopwatch.ElapsedMilliseconds;
+        }
     }
-    
-        
 }

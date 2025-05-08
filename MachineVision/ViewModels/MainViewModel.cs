@@ -16,7 +16,12 @@ namespace MachineVision.ViewModels
 {
     public class MainViewModel : NavigationViewModel
     {
-        public MainViewModel(ISettingService settingService, INavigationMenuService menuService, IRegionManager regionManager,IEventAggregator eventAggregator)
+        public MainViewModel(
+            ISettingService settingService,
+            INavigationMenuService menuService,
+            IRegionManager regionManager,
+            IEventAggregator eventAggregator
+        )
         {
             this.settingService = settingService;
             this.NavigationService = menuService;
@@ -31,6 +36,7 @@ namespace MachineVision.ViewModels
         private bool isTopDrawerOpen;
         private readonly ISettingService settingService;
         private readonly IRegionManager regionManager;
+
         public bool IsTopDrawerOpen
         {
             get { return isTopDrawerOpen; }
@@ -78,22 +84,25 @@ namespace MachineVision.ViewModels
             IsTopDrawerOpen = false;
             NavigationPage(item.PageName);
         }
+
         private void LanguageChanged(bool status)
         {
             NavigationService.RefreshMenus();
         }
+
         /// <summary>
         /// 初始化语言和主题
         /// </summary>
         private async Task ApplySettingAsync()
         {
             var setting = await settingService.GetSettingAsync();
-            if (setting!=null)
+            if (setting != null)
             {
                 LanguageHelper.SetLanguage(setting.Language);
             }
-            SettingViewModel.ModifyTheme(theme => theme.SetBaseTheme(setting.SkinName.ObjToBool()?BaseTheme.Dark:BaseTheme.Light));
-
+            SettingViewModel.ModifyTheme(theme =>
+                theme.SetBaseTheme(setting.SkinName.ObjToBool() ? BaseTheme.Dark : BaseTheme.Light)
+            );
         }
     }
 }

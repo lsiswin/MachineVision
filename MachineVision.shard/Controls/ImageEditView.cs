@@ -3,6 +3,7 @@ using System.Runtime.Intrinsics.X86;
 using System.Windows;
 using System.Windows.Controls;
 using HalconDotNet;
+using MachineVision.Core.TemplateMatch;
 using MachineVision.shard.Extensions;
 
 namespace MachineVision.shard.Controls
@@ -27,6 +28,55 @@ namespace MachineVision.shard.Controls
                 typeof(ImageEditView),
                 new PropertyMetadata(new ObservableCollection<DrawingObjectInfo>())
             );
+
+        public MatchResult MatchResult
+        {
+            get
+            {
+                return (MatchResult)GetValue(MatchResultProperty);
+            }
+            set { SetValue(MatchResultProperty, value); }
+        }
+
+        public static readonly DependencyProperty MatchResultProperty =
+            DependencyProperty.Register(
+                "MatchResult",
+                typeof(MatchResult),
+                typeof(ImageEditView),
+                new PropertyMetadata(MatchResultCallBack)
+            );
+
+        public static void MatchResultCallBack(
+            DependencyObject d,
+            DependencyPropertyChangedEventArgs e
+        )
+        {
+            if (d is ImageEditView view && e.NewValue != null)
+            {
+                view.DisplayMatchRender();
+            }
+        }
+
+        private void DisplayMatchRender()
+        {
+            if(Image != null)
+                DisPlay(Image);
+            if (MatchResult != null)
+            {
+                var setting = MatchResult.Setting;
+                foreach (var item in MatchResult.Results)
+                {
+                    if(setting.IsShowCenter)
+                        HWindow.DispCross(item.Row, item.Column, 50, item.Angle);
+                    //if (setting.IsShowDisplayText)
+                    
+                    //if(setting.IsShowMatchRange)
+                        
+                    
+                }
+            }
+            
+        }
 
         public HObject Image
         {
@@ -82,7 +132,7 @@ namespace MachineVision.shard.Controls
             {
                 btnDrawpen.Click += BtnDrawPen_Click;
             }
-            
+
             if (GetTemplateChild("Clear") is Button btnClear)
             {
                 btnClear.Click += (s, e) =>
@@ -180,9 +230,15 @@ namespace MachineVision.shard.Controls
             if (hObject != null)
             {
                 DrawingObjectList.Add(
-                    new DrawingObjectInfo { ShapType = shapeType,HObject = hObject, HTuple = hTuples }
+                    new DrawingObjectInfo
+                    {
+                        ShapType = shapeType,
+                        HObject = hObject,
+                        HTuple = hTuples,
+                    }
                 );
-                HOperatorSet.DispObj(hObject, HWindow);
+                HOperatorSet.GenContourRegionXld(hObject, out HObject hContour, "border");//获取对象的轮廓
+                HOperatorSet.DispObj(hContour, HWindow);
             }
             txtMsg.Text = string.Empty;
             HSmart.HZoomContent = HSmartWindowControlWPF.ZoomContent.WheelForwardZoomsIn;

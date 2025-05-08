@@ -10,8 +10,12 @@ namespace MachineVision.Core.TemplateMatch
     /// <summary>
     /// 模板匹配接口
     /// </summary>
-    public interface ITemplateMatchService:BindableBase
+    public interface ITemplateMatchService
     {
+        /// <summary>
+        /// 匹配结果显示设置
+        /// </summary>
+        MatchResultSetting Setting { get; set; }
         /// <summary>
         /// 模板匹配描述信息
         /// </summary>
@@ -21,7 +25,7 @@ namespace MachineVision.Core.TemplateMatch
         /// </summary>
         /// <param name="hObject">生成模板的指定区域图像</param>
         /// <returns></returns>
-        Task CreateTemplate(HObject hObject);
+        Task CreateTemplate(HObject image, HObject hObject);
         /// <summary>
         /// 设置模板参数
         /// </summary>
@@ -30,5 +34,10 @@ namespace MachineVision.Core.TemplateMatch
         /// 设置运行时参数
         /// </summary>
         void SetRunParameter();
+        /// <summary>
+        /// 运行
+        /// </summary>
+        /// <param name="image"></param>
+        MatchResult Run(HObject image);
     }
 }

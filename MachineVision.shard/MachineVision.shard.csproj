@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MachineVision.Core\MachineVision.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="halcondotnet">
       <HintPath>..\..\..\Program Files\MVTec\HALCON-24.11-Progress-Steady\bin\dotnet35\halcondotnet.dll</HintPath>
     </Reference>
