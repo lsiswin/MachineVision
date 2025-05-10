@@ -8,6 +8,8 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    Title="{DynamicResource ApplicationName}"
+    Icon=""
     Width="1280"
     Height="768"
     prism:ViewModelLocator.AutoWireViewModel="True"
@@ -31,11 +33,18 @@
                     FontSize="15"
                     FontWeight="Bold"
                     Foreground="White"
-                    Text="{DynamicResource ApplicationName}" />
+                    Text="{DynamicResource ApplicationName}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding GoHomeCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBlock>
                 <ListBox
                     x:Name="listMenuBox"
                     Grid.Column="1"
-                    ItemsSource="{Binding NavigationService.Items}">
+                    ItemsSource="{Binding NavigationService.Items}"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" />
@@ -130,6 +139,8 @@
                                                 <Button
                                                     Margin="5"
                                                     BorderThickness="10"
+                                                    Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}"
+                                                    CommandParameter="{Binding}"
                                                     Content="{Binding Name}"
                                                     FontSize="15" />
                                             </DataTemplate>

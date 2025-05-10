@@ -1,49 +1,48 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Documents;
 using HalconDotNet;
 using MachineVision.Core;
-using MachineVision.Core.TemplateMatch;
+using MachineVision.Core.TemplateMatch.QcrCodeModel;
 using MachineVision.Core.TemplateMatch.Shard;
 using MachineVision.shard.Controls;
 using Microsoft.Win32;
 
 namespace MachineVision.TemplateMatch.ViewModels
 {
-    public class ShapeViewModel : NavigationViewModel
+    /// <summary>
+    /// 二维码视图模型
+    /// </summary>
+    public class QrCodeViewModel:NavigationViewModel
     {
-        public ITemplateMatchService MatchService { get; set; }
 
-        public ShapeViewModel()
+        public QrCodeService MatchService { get; }
+        public DelegateCommand LoadImageCommand { get; private set; }
+        public DelegateCommand SetRangeCommand { get; private set; }
+        public DelegateCommand RunCommand { get; private set; }
+
+        public QrCodeViewModel(QrCodeService codeService)
         {
-            this.MatchService = ContainerLocator.Current.Resolve<ITemplateMatchService>(
-                nameof(TemplateMatchType.ShapeModel)
-            );
+            MatchService = codeService;
             LoadImageCommand = new DelegateCommand(LoadImage);
             SetRangeCommand = new DelegateCommand(SetRange);
-            CreateTemplateCommand = new DelegateCommand(CreateTemplate);
             RunCommand = new DelegateCommand(Run);
-            MatchResult = new MatchResult();
-            MaskObject = new HObject();
+            OcrMatchResult = new OcrMatchResult();
             DrawingObjectList = new ObservableCollection<DrawingObjectInfo>();
         }
 
-        private ObservableCollection<DrawingObjectInfo> drawingObjectList;
-
-        public ObservableCollection<DrawingObjectInfo> DrawingObjectList
-        {
-            get { return drawingObjectList; }
-            set
-            {
-                drawingObjectList = value;
-                RaisePropertyChanged();
-            }
-        }
+        
 
         /// <summary>
         /// 掩膜
         /// </summary>
         private HObject maskObject;
         private HObject image;
-        private MatchResult matchResult;
+        private OcrMatchResult ocrMatchResult;
 
         public HObject MaskObject
         {
@@ -67,57 +66,37 @@ namespace MachineVision.TemplateMatch.ViewModels
                 RaisePropertyChanged();
             }
         }
+        private ObservableCollection<DrawingObjectInfo> drawingObjectList;
 
-        /// <summary>
-        /// 绘制集合
-        /// </summary>
-        public MatchResult MatchResult
+        public ObservableCollection<DrawingObjectInfo> DrawingObjectList
         {
-            get { return matchResult; }
+            get { return drawingObjectList; }
             set
             {
-                matchResult = value;
+                drawingObjectList = value;
                 RaisePropertyChanged();
             }
         }
-
-        #region 命令实现方法
+        /// <summary>
+        /// 绘制集合
+        /// </summary>
+        public OcrMatchResult OcrMatchResult
+        {
+            get { return ocrMatchResult; }
+            set
+            {
+                ocrMatchResult = value;
+                RaisePropertyChanged();
+            }
+        }
         /// <summary>
         /// 执行
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
         private void Run()
         {
-            MatchResult = MatchService.Run(Image);
-            MatchResult.Setting = MatchService.Setting;
+            OcrMatchResult = MatchService.Run(Image);
         }
-
-        /// <summary>
-        /// 创建匹配模板
-        /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
-        private void CreateTemplate()
-        {
-            var hobject = DrawingObjectList.FirstOrDefault();
-            if (hobject != null)
-            {
-                if (MaskObject != null)
-                {
-                    HOperatorSet.Difference(
-                        hobject.HObject,
-                        MaskObject,
-                        out HObject regionDifference
-                    );
-                    MatchService.CreateTemplate(Image, regionDifference);
-                }
-                else
-                {
-                    MatchService.CreateTemplate(Image, hobject.HObject);
-                }
-                MatchResult.Message = $"{DateTime.Now}:创建模板成功!";
-            }
-        }
-
         /// <summary>
         /// 设置识别ROI范围
         /// </summary>
@@ -134,11 +113,11 @@ namespace MachineVision.TemplateMatch.ViewModels
                     Row2 = hobject.HTuple[2],
                     Column2 = hobject.HTuple[3],
                 };
-                MatchResult.Message = $"{DateTime.Now}:设置ROI范围成功!";
+                OcrMatchResult.Message = $"{DateTime.Now}:设置ROI范围成功!";
             }
             else
             {
-                MatchResult.Message = $"{DateTime.Now}:请先选择ROI范围!";
+                OcrMatchResult.Message = $"{DateTime.Now}:请先选择ROI范围!";
             }
         }
 
@@ -157,12 +136,6 @@ namespace MachineVision.TemplateMatch.ViewModels
                 Image = image;
             }
         }
-        #endregion
-        #region 命令
-        public DelegateCommand LoadImageCommand { get; private set; }
-        public DelegateCommand SetRangeCommand { get; private set; }
-        public DelegateCommand CreateTemplateCommand { get; private set; }
-        public DelegateCommand RunCommand { get; private set; }
-        #endregion
+
     }
 }

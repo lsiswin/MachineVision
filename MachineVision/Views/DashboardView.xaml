@@ -45,8 +45,8 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <md:Card
-                                        Width="120"
-                                        Height="120"
+                                        Width="100"
+                                        Height="100"
                                         Margin="5"
                                         Background="#34515E">
                                         <Grid>

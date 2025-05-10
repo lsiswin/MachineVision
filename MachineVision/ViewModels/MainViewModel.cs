@@ -28,24 +28,32 @@ namespace MachineVision.ViewModels
             this.regionManager = regionManager;
             eventAggregator.GetEvent<LanguageEventBus>().Subscribe(LanguageChanged);
             NavigateCommand = new DelegateCommand<NavigationItem>(Navigate);
+            GoHomeCommand = new DelegateCommand(() =>
+            {
+                NavigationPage("DashboardView");
+            });
+        }
+        private object _selectedNavItem;
+        public object SelectedNavItem
+        {
+            get => _selectedNavItem;
+            set => SetProperty(ref _selectedNavItem, value);
         }
 
         public INavigationMenuService NavigationService { get; }
         public DelegateCommand<NavigationItem> NavigateCommand { get; private set; }
-
-        private bool isTopDrawerOpen;
+        public DelegateCommand GoHomeCommand { get; private set; }
         private readonly ISettingService settingService;
         private readonly IRegionManager regionManager;
 
+        private bool _isTopDrawerOpen;
+
         public bool IsTopDrawerOpen
         {
-            get { return isTopDrawerOpen; }
-            set
-            {
-                isTopDrawerOpen = value;
-                RaisePropertyChanged();
-            }
+            get { return _isTopDrawerOpen; }
+            set { _isTopDrawerOpen = value;  if (!value) { SelectedNavItem = null; }  RaisePropertyChanged(); }
         }
+
 
         public override async void OnNavigatedTo(NavigationContext navigationContext)
         {
@@ -58,6 +66,8 @@ namespace MachineVision.ViewModels
 
         private void NavigationPage(string PageName)
         {
+            SelectedItem = null;
+            IsTopDrawerOpen = false; 
             regionManager
                 .Regions["MainViewRegion"]
                 .RequestNavigate(
@@ -70,6 +80,14 @@ namespace MachineVision.ViewModels
                         }
                     }
                 );
+            
+        }
+        private object selectedItem;
+
+        public object SelectedItem
+        {
+            get { return selectedItem; }
+            set { selectedItem = value; RaisePropertyChanged(); }
         }
 
         private void Navigate(NavigationItem item)
@@ -81,7 +99,6 @@ namespace MachineVision.ViewModels
                 IsTopDrawerOpen = true;
                 return;
             }
-            IsTopDrawerOpen = false;
             NavigationPage(item.PageName);
         }
 

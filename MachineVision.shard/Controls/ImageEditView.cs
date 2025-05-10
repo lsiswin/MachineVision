@@ -3,7 +3,8 @@ using System.Runtime.Intrinsics.X86;
 using System.Windows;
 using System.Windows.Controls;
 using HalconDotNet;
-using MachineVision.Core.TemplateMatch;
+using MachineVision.Core.Extensions;
+using MachineVision.Core.TemplateMatch.Shard;
 using MachineVision.shard.Extensions;
 
 namespace MachineVision.shard.Controls
@@ -11,8 +12,36 @@ namespace MachineVision.shard.Controls
     public class ImageEditView : Control
     {
         private HSmartWindowControlWPF HSmart;
-        private HWindow HWindow;
+        private HWindow hWindow;
         private TextBlock txtMsg;
+
+
+
+        public HWindow HWindow
+        {
+            get { return (HWindow)GetValue(HWindowProperty); }
+            set { SetValue(HWindowProperty, value); }
+        }
+        public static readonly DependencyProperty HWindowProperty =
+            DependencyProperty.Register("HWindow", typeof(HWindow), typeof(ImageEditView), new PropertyMetadata(null));
+
+
+
+        /// <summary>
+        /// 掩膜
+        /// </summary>
+        public HObject MaskObject
+        {
+            get { return (HObject)GetValue(MaskObjectProperty); }
+            set { SetValue(MaskObjectProperty, value); }
+        }
+
+        public static readonly DependencyProperty MaskObjectProperty =
+            DependencyProperty.Register("MaskObject", typeof(HObject), typeof(ImageEditView), new PropertyMetadata(null));
+
+        /// <summary>
+        /// 绘制形状集合
+        /// </summary>
         public ObservableCollection<DrawingObjectInfo> DrawingObjectList
         {
             get
@@ -61,17 +90,17 @@ namespace MachineVision.shard.Controls
         {
             if(Image != null)
                 DisPlay(Image);
-            if (MatchResult != null)
+            if (MatchResult != null&&MatchResult.Results!=null)
             {
                 var setting = MatchResult.Setting;
                 foreach (var item in MatchResult.Results)
                 {
                     if(setting.IsShowCenter)
-                        HWindow.DispCross(item.Row, item.Column, 50, item.Angle);
-                    //if (setting.IsShowDisplayText)
-                    
-                    //if(setting.IsShowMatchRange)
-                        
+                        hWindow.DispCross(item.Row, item.Column, 50, item.Angle);
+                    if(setting.IsShowDisplayText)
+                        hWindow.SetMessage($"({Math.Round(item.Row,2)},{Math.Round(item.Column, 2)})","image",item.Row,item.Column,"black","true");
+                    if(setting.IsShowMatchRange)
+                        hWindow.DispObj(item.TransContours);    
                     
                 }
             }
@@ -104,8 +133,8 @@ namespace MachineVision.shard.Controls
 
         private void DisPlay(HObject hObject)
         {
-            HWindow.DispObj(hObject);
-            HWindow.SetPart(0, 0, -2, -2);
+            hWindow.DispObj(hObject);
+            hWindow.SetPart(0, 0, -2, -2);
         }
 
         public override void OnApplyTemplate()
@@ -116,34 +145,43 @@ namespace MachineVision.shard.Controls
                 HSmart = hSmart;
                 hSmart.Loaded += HsmartLoad;
             }
-            if (GetTemplateChild("PART_Rect") is Button btnRect)
+            if (GetTemplateChild("PART_Rect") is MenuItem btnRect)
             {
                 btnRect.Click += BtnRect_Click;
             }
-            if (GetTemplateChild("PART_Ellipse") is Button btnEllipse)
+            if (GetTemplateChild("PART_Ellipse") is MenuItem btnEllipse)
             {
                 btnEllipse.Click += BtnEllipse_Click;
             }
-            if (GetTemplateChild("PART_Circle") is Button btnCircle)
+            if (GetTemplateChild("PART_Circle") is MenuItem btnCircle)
             {
                 btnCircle.Click += BtnCircle_Click;
             }
-            if (GetTemplateChild("PART_DrawPen") is Button btnDrawpen)
+            if (GetTemplateChild("PART_DrawPen") is MenuItem btnDrawpen)
             {
                 btnDrawpen.Click += BtnDrawPen_Click;
             }
+            if(GetTemplateChild("PART_Mask")is MenuItem btnMask)
+            {
+                btnMask.Click += BtnMask_Click;
+            }
 
-            if (GetTemplateChild("Clear") is Button btnClear)
+            if (GetTemplateChild("Clear") is MenuItem btnClear)
             {
                 btnClear.Click += (s, e) =>
                 {
                     DrawingObjectList.Clear();
-                    HWindow.ClearWindow();
+                    hWindow.ClearWindow();
                     DisPlay(Image);
                 };
             }
 
             base.OnApplyTemplate();
+        }
+
+        private void BtnMask_Click(object sender, RoutedEventArgs e)
+        {
+            DrawShape(ShapeType.Region);
         }
 
         private void BtnDrawPen_Click(object sender, RoutedEventArgs e)
@@ -181,13 +219,13 @@ namespace MachineVision.shard.Controls
             HSmart.HZoomContent = HSmartWindowControlWPF.ZoomContent.Off;
             await Task.Run(() =>
             {
-                HOperatorSet.SetColor(HWindow, "blue");
+                HOperatorSet.SetColor(hWindow, "blue");
                 switch (shapeType)
                 {
                     case ShapeType.Rectangle1:
                         {
                             HOperatorSet.DrawRectangle1(
-                                HWindow,
+                                hWindow,
                                 out hTuples[0],
                                 out hTuples[1],
                                 out hTuples[2],
@@ -199,7 +237,7 @@ namespace MachineVision.shard.Controls
                     case ShapeType.Circle:
                         {
                             HOperatorSet.DrawCircle(
-                                HWindow,
+                                hWindow,
                                 out hTuples[0],
                                 out hTuples[1],
                                 out hTuples[2]
@@ -210,7 +248,7 @@ namespace MachineVision.shard.Controls
                     case ShapeType.Ellipse:
                         {
                             HOperatorSet.DrawEllipse(
-                                HWindow,
+                                hWindow,
                                 out hTuples[0],
                                 out hTuples[1],
                                 out hTuples[2],
@@ -222,12 +260,16 @@ namespace MachineVision.shard.Controls
                         break;
                     case ShapeType.Region:
                         {
-                            HOperatorSet.DrawRegion(out hObject, HWindow);
+                            HOperatorSet.DrawRegion(out hObject, hWindow);
                         }
                         break;
                 }
             });
-            if (hObject != null)
+            if(shapeType == ShapeType.Region)
+            {
+                MaskObject = hObject;
+            }
+            else if (hObject != null)
             {
                 DrawingObjectList.Add(
                     new DrawingObjectInfo
@@ -238,7 +280,7 @@ namespace MachineVision.shard.Controls
                     }
                 );
                 HOperatorSet.GenContourRegionXld(hObject, out HObject hContour, "border");//获取对象的轮廓
-                HOperatorSet.DispObj(hContour, HWindow);
+                HOperatorSet.DispObj(hContour, hWindow);
             }
             txtMsg.Text = string.Empty;
             HSmart.HZoomContent = HSmartWindowControlWPF.ZoomContent.WheelForwardZoomsIn;
@@ -246,7 +288,8 @@ namespace MachineVision.shard.Controls
 
         private void HsmartLoad(object sender, RoutedEventArgs e)
         {
-            HWindow = HSmart.HalconWindow;
+            hWindow = HSmart.HalconWindow;
+            HWindow = hWindow;
         }
     }
 }

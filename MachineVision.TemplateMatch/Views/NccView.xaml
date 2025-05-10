@@ -1,13 +1,11 @@
 ﻿<UserControl
-    x:Class="MachineVision.TemplateMatch.Views.ShapeView"
+    x:Class="MachineVision.TemplateMatch.Views.NccView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:MachineVision.shard.Controls;assembly=MachineVision.shard"
-    xmlns:core="clr-namespace:MachineVision.Core;assembly=MachineVision.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MachineVision.TemplateMatch.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DataContext="{d:DesignInstance Type=core:NavigationViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -162,12 +160,12 @@
 
                                             <Expander>
                                                 <Expander.Header>
-                                                    <Grid Margin="-20,0">
+                                                    <Grid Margin="-22,0">
                                                         <TextBlock FontSize="16" Text="模板参数" />
                                                     </Grid>
                                                 </Expander.Header>
                                                 <Expander.Content>
-                                                    <StackPanel Margin="5,0">
+                                                    <StackPanel>
                                                         <TextBlock Text="NumLevels" />
                                                         <ComboBox
                                                             Margin="0,5"
@@ -212,20 +210,6 @@
                                                             <ComboBoxItem>0.06</ComboBoxItem>
                                                             <ComboBoxItem>0.08</ComboBoxItem>
                                                         </ComboBox>
-                                                        <TextBlock Text="Optimization" />
-                                                        <ComboBox
-                                                            Margin="0,5"
-                                                            Padding="5"
-                                                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                                            Text="{Binding MatchService.TemplateParameter.Optimization}">
-                                                            <ComboBoxItem>auto</ComboBoxItem>
-                                                            <ComboBoxItem>none</ComboBoxItem>
-                                                            <ComboBoxItem>point_reduction_low</ComboBoxItem>
-                                                            <ComboBoxItem>point_reduction_medium</ComboBoxItem>
-                                                            <ComboBoxItem>point_reduction_high</ComboBoxItem>
-                                                            <ComboBoxItem>pregeneration</ComboBoxItem>
-                                                            <ComboBoxItem>no_pregeneration</ComboBoxItem>
-                                                        </ComboBox>
                                                         <TextBlock Text="Metric" />
                                                         <ComboBox
                                                             Margin="0,5"
@@ -236,41 +220,6 @@
                                                             <ComboBoxItem>ignore_global_polarity</ComboBoxItem>
                                                             <ComboBoxItem>ignore_local_polarity</ComboBoxItem>
                                                             <ComboBoxItem>ignore_color_polarity</ComboBoxItem>
-                                                        </ComboBox>
-                                                        <TextBlock Text="Contrast" />
-                                                        <ComboBox
-                                                            Margin="0,5"
-                                                            Padding="5"
-                                                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                                            Text="{Binding MatchService.TemplateParameter.Contrast}">
-                                                            <ComboBoxItem>auto</ComboBoxItem>
-                                                            <ComboBoxItem>auto_contrast</ComboBoxItem>
-                                                            <ComboBoxItem>auto_contrast_hyst</ComboBoxItem>
-                                                            <ComboBoxItem>auto_min_size</ComboBoxItem>
-                                                            <ComboBoxItem>10</ComboBoxItem>
-                                                            <ComboBoxItem>20</ComboBoxItem>
-                                                            <ComboBoxItem>30</ComboBoxItem>
-                                                            <ComboBoxItem>40</ComboBoxItem>
-                                                            <ComboBoxItem>60</ComboBoxItem>
-                                                            <ComboBoxItem>80</ComboBoxItem>
-                                                        </ComboBox>
-                                                        <TextBlock Text="MinContrast" />
-                                                        <ComboBox
-                                                            Margin="0,5"
-                                                            Padding="5"
-                                                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                                            Text="{Binding MatchService.TemplateParameter.MinContrast}">
-                                                            <ComboBoxItem>auto</ComboBoxItem>
-                                                            <ComboBoxItem>1</ComboBoxItem>
-                                                            <ComboBoxItem>2</ComboBoxItem>
-                                                            <ComboBoxItem>3</ComboBoxItem>
-                                                            <ComboBoxItem>4</ComboBoxItem>
-                                                            <ComboBoxItem>5</ComboBoxItem>
-                                                            <ComboBoxItem>7</ComboBoxItem>
-                                                            <ComboBoxItem>10</ComboBoxItem>
-                                                            <ComboBoxItem>20</ComboBoxItem>
-                                                            <ComboBoxItem>30</ComboBoxItem>
-                                                            <ComboBoxItem>40</ComboBoxItem>
                                                         </ComboBox>
 
                                                         <Button
@@ -283,12 +232,12 @@
 
                                             <Expander>
                                                 <Expander.Header>
-                                                    <Grid Margin="-20,0">
+                                                    <Grid Margin="-22,0">
                                                         <TextBlock FontSize="16" Text="运行参数" />
                                                     </Grid>
                                                 </Expander.Header>
                                                 <Expander.Content>
-                                                    <StackPanel Margin="5,0">
+                                                    <StackPanel>
                                                         <TextBlock Text="AngleStart" />
                                                         <TextBox
                                                             Margin="0,5"
@@ -325,18 +274,8 @@
                                                             Padding="5"
                                                             Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                                             Text="{Binding MatchService.RunParameter.SubPixel}">
-                                                            <ComboBoxItem>none</ComboBoxItem>
-                                                            <ComboBoxItem>none</ComboBoxItem>
-                                                            <ComboBoxItem>interpolation</ComboBoxItem>
-                                                            <ComboBoxItem>least_squares</ComboBoxItem>
-                                                            <ComboBoxItem>least_squares_high</ComboBoxItem>
-                                                            <ComboBoxItem>least_squares_very_high</ComboBoxItem>
-                                                            <ComboBoxItem>max_deformation 1</ComboBoxItem>
-                                                            <ComboBoxItem>max_deformation 2</ComboBoxItem>
-                                                            <ComboBoxItem>max_deformation 3</ComboBoxItem>
-                                                            <ComboBoxItem>max_deformation 4</ComboBoxItem>
-                                                            <ComboBoxItem>max_deformation 5</ComboBoxItem>
-                                                            <ComboBoxItem>max_deformation 6</ComboBoxItem>
+                                                            <ComboBoxItem>true</ComboBoxItem>
+                                                            <ComboBoxItem>false</ComboBoxItem>
                                                         </ComboBox>
                                                         <TextBlock Text="NumLevels" />
                                                         <ComboBox
@@ -355,12 +294,6 @@
                                                             <ComboBoxItem>8</ComboBoxItem>
                                                             <ComboBoxItem>9</ComboBoxItem>
                                                         </ComboBox>
-                                                        <TextBlock Text="Greediness" />
-                                                        <TextBox
-                                                            Margin="0,5"
-                                                            Padding="5"
-                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                                            Text="{Binding MatchService.RunParameter.Greediness}" />
                                                     </StackPanel>
                                                 </Expander.Content>
                                             </Expander>

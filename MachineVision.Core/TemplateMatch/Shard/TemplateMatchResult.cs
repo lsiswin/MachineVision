@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HalconDotNet;
 
-namespace MachineVision.Core.TemplateMatch
+namespace MachineVision.Core.TemplateMatch.Shard
 {
     public class TemplateMatchResult
     {
@@ -28,5 +29,9 @@ namespace MachineVision.Core.TemplateMatch
         /// 分数
         /// </summary>
         public double Score { get; set; }
+        /// <summary>
+        /// 匹配结果
+        /// </summary>
+        public HObject TransContours { get; set; }
     }
 }

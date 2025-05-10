@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MachineVision.Core.TemplateMatch
+namespace MachineVision.Core.TemplateMatch.Shard
 {
     /// <summary>
     /// 算子的描述信息

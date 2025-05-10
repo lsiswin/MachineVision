@@ -1,31 +1,35 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using HalconDotNet;
 using MachineVision.Core;
 using MachineVision.Core.TemplateMatch;
+using MachineVision.Core.TemplateMatch.NccModel;
 using MachineVision.Core.TemplateMatch.Shard;
 using MachineVision.shard.Controls;
 using Microsoft.Win32;
 
 namespace MachineVision.TemplateMatch.ViewModels
 {
-    public class ShapeViewModel : NavigationViewModel
+    public class NccViewModel : NavigationViewModel
     {
-        public ITemplateMatchService MatchService { get; set; }
-
-        public ShapeViewModel()
+        public NccViewModel()
         {
             this.MatchService = ContainerLocator.Current.Resolve<ITemplateMatchService>(
-                nameof(TemplateMatchType.ShapeModel)
+                nameof(TemplateMatchType.NccModel)
             );
             LoadImageCommand = new DelegateCommand(LoadImage);
             SetRangeCommand = new DelegateCommand(SetRange);
             CreateTemplateCommand = new DelegateCommand(CreateTemplate);
             RunCommand = new DelegateCommand(Run);
             MatchResult = new MatchResult();
-            MaskObject = new HObject();
             DrawingObjectList = new ObservableCollection<DrawingObjectInfo>();
         }
 
+        public ITemplateMatchService MatchService { get; set; }
         private ObservableCollection<DrawingObjectInfo> drawingObjectList;
 
         public ObservableCollection<DrawingObjectInfo> DrawingObjectList
@@ -153,7 +157,7 @@ namespace MachineVision.TemplateMatch.ViewModels
             if (dialogResult)
             {
                 var image = new HImage();
-                image.ReadImage(dialog.FileName);
+                image.ReadImage(dialog.FileName);                
                 Image = image;
             }
         }

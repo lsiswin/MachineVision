@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HalconDotNet;
+using MachineVision.Core.TemplateMatch.Shard;
 
 namespace MachineVision.Core.TemplateMatch
 {
@@ -12,6 +13,10 @@ namespace MachineVision.Core.TemplateMatch
     /// </summary>
     public interface ITemplateMatchService
     {
+        /// <summary>
+        /// ROI参数
+        /// </summary>
+        RoiPararmeter RoiPararmeter { get; set; }
         /// <summary>
         /// 匹配结果显示设置
         /// </summary>

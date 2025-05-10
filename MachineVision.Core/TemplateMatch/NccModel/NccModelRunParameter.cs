@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MachineVision.Core.Shard;
+﻿using MachineVision.Core.Shard;
 
-namespace MachineVision.Core.TemplateMatch
+namespace MachineVision.Core.TemplateMatch.NccModel
 {
     /// <summary>
-    /// 形状匹配模板运行参数
+    /// 相关性匹配运行参数
     /// </summary>
-    public class ShapeModelRunParameter : BaseParameter
+    public class NccModelRunParameter: BaseParameter
     {
         private int numLevels;
         private double angleStart;
         private double angleExtent;
         private double minScore;
-        private double greediness;
         private string subPixel;
         private double maxOverlap;
         private int numMatches;
@@ -46,15 +40,6 @@ namespace MachineVision.Core.TemplateMatch
         {
             get { return subPixel; }
             set { subPixel = value; RaisePropertyChanged(); }
-        }
-
-        /// <summary>
-        /// 贪婪程度
-        /// </summary>
-        public double Greediness
-        {
-            get { return greediness; }
-            set { greediness = value; RaisePropertyChanged(); }
         }
 
         /// <summary>
@@ -100,9 +85,8 @@ namespace MachineVision.Core.TemplateMatch
             MinScore = 0.5;
             NumMatches = 1;
             MaxOverlap = 0.5;
-            SubPixel = "least_squares";
-            NumLevels = 0;
-            Greediness = 0.9;
+            SubPixel = "true";
+            NumLevels = 0; 
         }
     }
 }

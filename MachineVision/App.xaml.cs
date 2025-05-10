@@ -2,6 +2,10 @@
 using System.Data;
 using System.Windows;
 using MachineVision.Core.TemplateMatch;
+using MachineVision.Core.TemplateMatch.CircleModel;
+using MachineVision.Core.TemplateMatch.NccModel;
+using MachineVision.Core.TemplateMatch.QcrCodeModel;
+using MachineVision.Core.TemplateMatch.ShapeModel;
 using MachineVision.Services;
 using MachineVision.TemplateMatch;
 using MachineVision.TemplateMatch.ViewModels;
@@ -43,13 +47,25 @@ namespace MachineVision
 
         protected override void RegisterTypes(IContainerRegistry services)
         {
-            services.Register<ISettingService, SettingService>();
-            services.RegisterScoped<INavigationMenuService, NavigationMenuService>();
+            
+
+
             services.RegisterForNavigation<DashboardView, DashboardViewModel>();
             services.RegisterForNavigation<MainView, MainViewModel>();
             services.RegisterForNavigation<SettingView,SettingViewModel>();
             services.RegisterForNavigation<ShapeView, ShapeViewModel>();
+            services.RegisterForNavigation<NccView, NccViewModel>();
+            services.RegisterForNavigation<QrCodeView, QrCodeViewModel>();
+            services.RegisterForNavigation<BarCodeView, BarCodeViewModel>();
+            services.RegisterForNavigation<CircleMeasureView, CircleMeasureViewModel>();
+
+            services.Register<ISettingService, SettingService>();
+            services.RegisterScoped<INavigationMenuService, NavigationMenuService>();
             services.Register<ITemplateMatchService,ShapeModelService>(nameof(TemplateMatchType.ShapeModel));
+            services.Register<ITemplateMatchService, NccModelService>(nameof(TemplateMatchType.NccModel));
+            services.Register<BarCodeService>();
+            services.Register<QrCodeService>();
+            services.Register<CircleService>();
 
         }
 

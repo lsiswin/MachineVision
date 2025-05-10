@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MachineVision.Core.Shard;
 
-namespace MachineVision.Core.TemplateMatch
+namespace MachineVision.Core.TemplateMatch.ShapeModel
 {
     /// <summary>
     /// 形状匹配模板参数

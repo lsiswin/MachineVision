@@ -20,6 +20,10 @@ namespace MachineVision.TemplateMatch
         {
             service.RegisterForNavigation<DrawShapeView, DrawShapeViewModel>();
             service.RegisterForNavigation<ShapeView, ShapeViewModel>();
+            service.RegisterForNavigation<NccView, NccViewModel>();
+            service.RegisterForNavigation<BarCodeView, BarCodeViewModel>();
+            service.RegisterForNavigation<QrCodeView, QrCodeViewModel>();
+            service.RegisterForNavigation<CircleMeasureView, CircleMeasureViewModel>();
         }
     }
 }
